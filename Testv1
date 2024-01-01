@@ -1,36 +1,3 @@
-getgenv()config.keybind = false;
-getgenv()config.keybind2 = false;
-getgenv()config.spamKeybind = false
-
-
-local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3')))()
-
-local w = library:CreateWindow("Test Phase") -- Creates the window
-
-local b = w:CreateFolder("B") -- Creates the folder(U will put here your buttons,etc)
-
-b:Button("Button",function()
-    print("Elym Winning")
-end)
-
-b:Toggle("Toggle",function(bool)
-    getgenv().config.keybind = bool
-    print('Parry is ', bool)
-end)
-
-local config = {
-    adjustment = 3,
-    defaultHitRange = 0.1,
-    hitRangeToggle = 0.1,
-    deflectCooldown = 0.1,
-    mode = 'Toggle',
-    deflectType = 'Press',
-    notifications = true,
-    keybind = false,
-    keybind2 = false,
-    spamKeybind = false
- }
-
 -- Services
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -46,7 +13,7 @@ local lastDeflectTime = 0
 
 -- Find the real ball
 local function findBall()
-   local realBall
+    local realBall
 
     for _, ball in pairs(Balls:GetChildren()) do
         if ball:GetAttribute("realBall") == true then
@@ -63,19 +30,19 @@ local function isTarget()
     return ball and ball:GetAttribute("target") == LocalPlayer.Name
 end
 
- -- Detect if the ball is within hit range
+-- Detect if the ball is within hit range
 local function detectBall()
-   local ball = findBall()
+    local ball = findBall()
 
-   if ball then
+    if ball then
         local ballVelocity = ball.Velocity.Magnitude
         local ballPosition = ball.Position
         local playerPosition = LocalPlayer.Character.HumanoidRootPart.Position
         local distance = (ballPosition - playerPosition).Magnitude
         local pingAccountability = ballVelocity * (game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() / 1000)
 
-        distance = pingAccountability
-        distance = config.adjustment
+        distance -= pingAccountability
+        distance -= config.adjustment
 
         local hit = distance / ballVelocity
 
